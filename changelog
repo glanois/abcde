@@ -1,4 +1,4 @@
-abcde (2.1.20-1) unstable; urgency=low
+abcde 2.1.20
 
   * The "Let's have a good abcde in Sarge" release.
   * The mungefile() function changes * with + by default to avoid creating
