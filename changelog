@@ -1,3 +1,13 @@
+abcde 2.2.4
+
+  * Changed the way we call flac, to adapt to the new times:
+    --import-vc-from= to --import-tags-from.
+  * DOSPLAYLIST was not included in the list of options.
+  * Options passed to the encoder by using <-o ogg:"-b 192"> are now
+    supported. One can modify the way abcde encodes just for the current CD.
+
+ -- Jesus Climent <jesus.climent@hispalinux.es>  Mon, 21 Feb 2005 14:42:57 +0200
+
 abcde 2.2.3
 
   * debian/control

@@ -11,7 +11,7 @@
 # Copyright for this work is to expire January 1, 2010, after which it
 # shall be public domain.
 
-VERSION="2.2.3"
+VERSION="2.2.4"
 
 usage ()
 {
@@ -218,6 +218,7 @@ relpath ()
 			FR="$(echo "$FR" | cut -d/ -f2-)"
 			TO="../$TO"
 		done
+		;;
 	esac
 
 	echo $TO
@@ -358,7 +359,7 @@ do_tag ()
 				*)   echo COMMENT="$COMMENTOUTPUT";;
 			esac	
 		fi
-                ) | run_command tagtrack-$1 $METAFLAC --import-vc-from=- --no-utf8-convert "$ABCDETEMPDIR/track$1.$OUTPUT"
+                ) | run_command tagtrack-$1 $METAFLAC --import-tags-from=- --no-utf8-convert "$ABCDETEMPDIR/track$1.$OUTPUT"
 		;;
 	spx)
 		run_command tagtrack-$1 true
@@ -798,7 +799,6 @@ do_playlist ()
 		## (some hardware players insist on CRLF endings)
 		if [ "$DOSPLAYLIST" = "y" ]; then
 			awk '{substr("\r",""); printf "%s\r\n", $0}' "$OUTPUTDIR/$PLAYLISTFILE" > "$ABCDETEMPDIR/PLAYLISTFILE.tmp"
-#			mv -f "$ABCDETEMPDIR/PLAYLISTFILE.tmp" "$OUTPUTDIR/$PLAYLISTFILE"
 			cat "$ABCDETEMPDIR/PLAYLISTFILE.tmp" | sed 's/\//\\/' > "$OUTPUTDIR/$PLAYLISTFILE"
 		fi
 		echo "playlistcomplete" >> "$ABCDETEMPDIR/status"
@@ -1867,7 +1867,7 @@ fi
 
 # Parse command line options
 #while getopts 1a:bc:C:d:Dhj:klLnNo:pr:S:t:T:vVx opt ; do
-while getopts 1a:A:bc:C:d:Dhj:klLnNo:pr:Rs:S:t:T:vVxw:W: opt ; do
+while getopts 1a:A:bc:C:d:Dhj:klLmnNo:pr:Rs:S:t:T:vVxw:W: opt ; do
 	case "$opt" in
 		1) ONETRACK=y ;;
 		a) ACTIONS="$OPTARG" ;;
@@ -2024,6 +2024,29 @@ case "$NORMALIZERSYNTAX" in
 		;;
 esac
 
+# Allow -o OUTPUT(1):OPTIONS(1),...,OUTPUT(N):OPTIONS(N) mode of operation
+if echo $OUTPUTTYPE | grep ":" > /dev/null 2>&1 ; then
+	OLDFS="$FS"
+	export FS=","
+	for OUTPUT in "$OUTPUTTYPE"
+	do
+		case "$OUTPUT" in
+			ogg:*)	OGGENCODEROPTSCLI="$( echo $OUTPUT | cut -d: -f2- )" ;;
+			mp3:*)	MP3ENCODEROPTSCLI="$( echo $OUTPUT | cut -d: -f2- )" ;;
+			flac:*)	FLACENCODEROPTSCLI="$( echo $OUTPUT | cut -d: -f2- )" ;;
+			spx:*)	SPEEXENCODEROPTSCLI="$( echo $OUTPUT | cut -d: -f2- )" ;;
+			mpc:*)	MPPENCODEROPTSCLI="$( echo $OUTPUT | cut -d: -f2- )" ;;
+		esac
+	done
+	for OUTPUT in "$OUTPUTTYPE"
+	do
+		TEMPOUTPUT=$( echo "$OUTPUT" | cut -d: -f1 )
+		TEMPOUTPUTTYPE="${TEMPOUTPUTTYPE:+$TEMPOUTPUTTYPE,}$TEMPOUTPUT"
+	done
+	OUTPUTTYPE="$TEMPOUTPUTTYPE"
+	FS="$OLDFS"
+fi
+
 # If nothing has been specified, use oggenc for oggs and lame for mp3s and flac for flacs and speexenc for speex and mppenc for mpps
 
 # Getting ready for multiple output changes
@@ -2051,59 +2074,59 @@ done
 # decide which encoder
 case "$MP3ENCODERSYNTAX" in
 	lame)
-		MP3ENCODEROPTS="$LAMEOPTS"
+		MP3ENCODEROPTS="${MP3ENCODEROPTSCLI:-$LAMEOPTS}"
 		MP3ENCODER="$LAME"
 		;;
 	gogo)
-		MP3ENCODEROPTS="$GOGOOPTS"
+		MP3ENCODEROPTS="${MP3ENCODEROPTSCLI:-$GOGOOPTS}"
 		MP3ENCODER="$GOGO"
 		;;
 	bladeenc)
-		MP3ENCODEROPTS="$BLADEENCOPTS"
+		MP3ENCODEROPTS="${MP3ENCODEROPTSCLI:-$BLADEENCOPTS}"
 		MP3ENCODER="$BLADEENC"
 		;;
 	l3enc)
-		MP3ENCODEROPTS="$L3ENCOPTS"
+		MP3ENCODEROPTS="${MP3ENCODEROPTSCLI:-$L3ENCOPTS}"
 		MP3ENCODER="$L3ENC"
 		;;
 	xingmp3enc)
-		MP3ENCODEROPTS="$XINGMP3ENCOPTS"
+		MP3ENCODEROPTS="${MP3ENCODEROPTSCLI:-$XINGMP3ENCOPTS}"
 		MP3ENCODER="$XINGMP3ENC"
 		;;
 	mp3enc)
-		MP3ENCODEROPTS="$MP3ENCOPTS"
+		MP3ENCODEROPTS="${MP3ENCODEROPTSCLI:-$MP3ENCOPTS}"
 		MP3ENCODER="$MP3ENC"
 		;;
 esac
 case "$OGGENCODERSYNTAX" in
 	vorbize)
-		OGGENCODEROPTS="$VORBIZEOPTS"
+		OGGENCODEROPTS="${OGGENCODEROPTSCLI:-$VORBIZEOPTS}"
 		OGGENCODER="$VORBIZE"
 		;;
 	oggenc)
-		OGGENCODEROPTS="$OGGENCOPTS"
+		OGGENCODEROPTS="${OGGENCODEROPTSCLI:-$OGGENCOPTS}"
 		OGGENCODER="$OGGENC"
 		;;
 esac
 case "$FLACENCODERSYNTAX" in
 	flac)
-		FLACENCODEROPTS="$FLACOPTS"
+		FLACENCODEROPTS="${FLACENCODEROPTSCLI:-$FLACOPTS}"
 		FLACENCODER="$FLAC"
 		;;
 esac
 case "$SPEEXENCODERSYNTAX" in
 	speexenc)
-		SPEEXENCODEROPTS="$SPEEXENCOPTS"
+		SPEEXENCODEROPTS="${SPEEXENCODEROPTSCLI:-$SPEEXENCOPTS}"
 		SPEEXENCODER="$SPEEXENC"
 		;;
 esac
 case "$MPPENCODERSYNTAX" in
 	mppenc)
-		MPPENCODEROPTS="$MPPENCOPTS"
+		MPPENCODEROPTS="${MPPENCODEROPTSCLI:-$MPPENCOPTS}"
 		MPPENCODER="$MPPENC"
 		;;
 esac
-
+	
 # and which tagger
 
 if [ "$ID3TAGV" = "1" ]; then
