@@ -1,3 +1,10 @@
+abcde 2.2.3
+
+  * debian/control
+    - suggest normalize-audio, since it changed its name (Closes: #287674).
+
+ -- Jesus Climent <jesus.climent@hispalinux.es>  Fri, 29 Dec 2004 10:00:00 +0200
+
 abcde 2.2.1
 
   * Spotted and solved a problem with the way the data tracks were detected

@@ -1,3 +1,10 @@
+abcde (2.2.3-1) unstable; urgency=low
+
+  * debian/control
+    - suggest normalize-audio, since it changed its name (Closes: #287674).
+
+ -- Jesus Climent <jesus.climent@hispalinux.es>  Fri, 29 Dec 2004 10:00:00 +0200
+
 abcde (2.2.2-1) unstable; urgency=low
 
   * Quotes missing when evaluating a value (Closes: #284018).
