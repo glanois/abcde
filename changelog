@@ -2,8 +2,17 @@ abcde 2.2.3
 
   * debian/control
     - suggest normalize-audio, since it changed its name (Closes: #287674).
+  * Use the default while erasing an existing playlist (Closes: #288835).
+  * Does not destroy track information when a track contains "=" in the name
+    (Closes: #290709).
 
- -- Jesus Climent <jesus.climent@hispalinux.es>  Fri, 29 Dec 2004 10:00:00 +0200
+ -- Jesus Climent <jesus.climent@hispalinux.es>  Sat, 22 Jan 2005 15:35:46 +0200
+
+abcde 2.2.2
+
+  * Quotes missing when evaluating a value (Closes: #284018).
+
+ -- Jesus Climent <jesus.climent@hispalinux.es>  Fri,  3 Dec 2004 09:20:18 +0200
 
 abcde 2.2.1
 
