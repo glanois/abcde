@@ -321,7 +321,7 @@ do_tag ()
 		               	if [ -n "$CDGENRE" ]; then
 					echo GENRE="$CDGENRE"
 		                fi	
-				echo TRACKNUMBER=$1
+				echo TRACKNUMBER=${TRACKNUM:-$1}
 				echo CDDB=$CDDBDISCID
 				if [ "$(eval echo ${COMMENT})" != "" ]; then
 					case "$COMMENTOUTPUT" in
@@ -359,7 +359,7 @@ do_tag ()
 				*)   echo COMMENT="$COMMENTOUTPUT";;
 			esac	
 		fi
-                ) | run_command tagtrack-$1 $METAFLAC --import-tags-from=- --no-utf8-convert "$ABCDETEMPDIR/track$1.$OUTPUT"
+                ) | run_command tagtrack-$1 $METAFLAC --no-utf8-convert --import-tags-from=- "$ABCDETEMPDIR/track$1.$OUTPUT"
 		;;
 	spx)
 		run_command tagtrack-$1 true
@@ -846,7 +846,12 @@ do_discid ()
 				cdparanoia|debug)
 					if [ "$WEHAVEACD" = "y" ]; then
 						vecho "Querying the CD for audio tracks..."
-						TRACKS=$( $CDROMREADER -d $CDROM -Q --verbose 2>&1 | egrep '^[[:space:]]+[[:digit:]]' | tail -n 1 |  awk '{print $1}' | tr -d "." | tr '\n' ' ' )
+						CDPARANOIAOUTPUT=$( $CDROMREADER -d $CDROM -Q --verbose 2>&1 )
+						RET=$?
+						if [ ! "$RET" = "0" ];then
+							echo "Warning: Something went wrong while querying the CD... Maybe a DATA CD?"
+						fi
+						TRACKS="$( echo "$CDPARANOIAOUTPUT" | egrep '^[[:space:]]+[[:digit:]]' | tail -n 1 |  awk '{print $1}' | tr -d "." | tr '\n' ' ' )"
 						CDPARANOIAAUDIOTRACKS="$TRACKS"
 					else
 						if [ -f "$ABCDETEMPDIR/status" ] && checkstatus cdparanoia-audio-tracks ; then
@@ -860,6 +865,10 @@ do_discid ()
 			esac
 		else
 			TRACKS=$(echo $TRACKINFO | cut -f2 -d' ')
+		fi
+		if echo "$TRACKS" | grep [[:digit:]] > /dev/null 2>&1 ;then :;else
+			echo "The disc does not contain any tracks. Giving up..."
+			exit 0
 		fi
 		echo -n "Grabbing entire CD - tracks: "
 		if [ ! "$PADTRACKS" = "y" ] ; then
@@ -2126,7 +2135,7 @@ case "$MPPENCODERSYNTAX" in
 		MPPENCODER="$MPPENC"
 		;;
 esac
-	
+
 # and which tagger
 
 if [ "$ID3TAGV" = "1" ]; then

@@ -5,8 +5,15 @@ abcde (2.2.4-1) unstable; urgency=low
   * DOSPLAYLIST was not included in the list of options.
   * Options passed to the encoder by using <-o ogg:"-b 192"> are now
     supported. One can modify the way abcde encodes just for the current CD.
+  * Unfortunatelly I forgot to add the starting number for tags in Ogg. For
+    MP3 is a bit more difficult, since it needs changing the X/YY code.
+  * Also, the order of the tags in metaflac is important for the utf8 names.
+    Thanks to Frederik Juul Christiani (Closes: #297482)
+  * Added CDROMID in the .conf file, for reader programs that need it
+    (Closes: #297005)
+  * Added a check for cdparanoia when encountering data-only CDs.
 
- -- Jesus Climent <jesus.climent@hispalinux.es>  Mon, 21 Feb 2005 14:42:57 +0200
+ -- Jesus Climent <jesus.climent@hispalinux.es>  Tue,  1 Mar 2005 15:14:24 +0200
 
 abcde (2.2.3-1) unstable; urgency=low
 
