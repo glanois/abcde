@@ -1,3 +1,10 @@
+abcde 2.2.6
+
+  * Double quotation added to solve parsing * as a wildcard (Closes: #302904).
+    Thanks to Christian Grigis for the patch. Also (Closes: #268088).
+
+ -- Jesus Climent <jesus.climent@hispalinux.es>  Sun,  3 Apr 2005 17:56:32 +0000
+
 abcde 2.2.5
 
   * CDPARANOIAOUTPUT missed some quotes.
@@ -6,7 +13,7 @@ abcde 2.2.5
   * Small typos with CDROM comparisons.
   * Logic for CDROM variable improved.
   * Version bumped to 2.2.5 and targeted to Sarge.
-  
+
  -- Jesus Climent <jesus.climent@hispalinux.es>  Sat,  2 Apr 2005 21:05:18 +0300
 
 abcde 2.2.4
