@@ -1,3 +1,10 @@
+abcde 2.1.22
+
+  * Small patch to support ()'s in the path under MacOSX. Thanks to Evan Jones
+    for noticing and sending the patch.
+      
+ -- Jesus Climent <jesus.climent@hispalinux.es>  Sat, 25 Sep 2004 20:23:23 +0000
+
 abcde 2.1.21
 
   * Changed normalize with normalize-audio (Closes: #267053). Carefull! this
