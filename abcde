@@ -2207,37 +2207,6 @@ if [ X"$CDSPEEDVALUE" != "X" ]; then
 	esac
 fi
 
-if [ "$STRIPDATATRACKS" = "y" ] && [ ! "$ONETRACK" = "y" ]; then
-	case "$CDROMREADERSYNTAX" in
-		cdparanoia|debug) 
-			# cdparanoia can query the CD, so let's process the TRACKQUEUE list with the results.
-			if checkstatus cdparanoia-audio-tracks; then
-				CDTRACKQUEUE=$( cat $ABCDETEMPDIR/cdparanoia-audio-tracks )
-			else
-				## FIXME ##
-				vecho "Querying the CD to obtain a list of valid audio tracks..."
-				$CDROMREADER -Q > $ABCDETEMPDIR/cdparanoia-query 2>&1
-				# Obtain a list of valid audio tracks from the results of the query
-				CDTRACKQUEUE=$( cat $ABCDETEMPDIR/cdparanoia-query | egrep '^[[:space:]]+[[:digit:]]' | awk '{print $1}' | tr -d "." | tr '\n' ' ' )
-			fi
-			# Obtain the track padding value from the before-processing list and pad the CD list
-			TRACKNUMPADDING=$( echo $TRACKQUEUE | awk '{print $1}' | tr -d " \n" | wc -c )
-			for TRACK in $CDTRACKQUEUE ; do
-				TRACKNUM=$(printf %0.${TRACKNUMPADDING}d $(expr ${TRACK} + 0 ))
-				PADNEWTRACKQUEUE=$(echo $PADNEWTRACKQUEUE $TRACKNUM)
-			done
-			CDTRACKQUEUE=$PADNEWTRACKQUEUE
-			# Now, compare if the values in the list are valid tracks in the CD
-			for TRACK in $TRACKQUEUE; do
-				if echo $CDTRACKQUEUE | grep $TRACK >/dev/null ; then
-					NEWTRACKQUEUE="$NEWTRACKQUEUE $TRACK"
-				fi
-			done
-			TRACKQUEUE="$NEWTRACKQUEUE"
-		;;
-	esac
-fi
-
 # Create playlist if needed (backgroundable) and start reading in tracks
 
 (
