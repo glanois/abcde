@@ -1,1 +1,6 @@
-No serious ones ;)
+* New FLAC (1.1.1) uses Ogg as a media container when using -ogg, thus uses the
+  .ogg extension. In such cases, the encoding fails, since we use .flac as an
+  extension. New 2.3 version will (most likely) introduce a solution.
+
+* Linux SCSI emulation layer has a problem with cdparanoia: it requires an
+  extra flag to be passed. See bugs.debian.org/abcde for more info.
