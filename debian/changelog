@@ -1,3 +1,14 @@
+abcde (2.2.5-1) unstable; urgency=low
+
+  * CDPARANOIAOUTPUT missed some quotes.
+  * Removed some useless lines.
+  * If BATCH is used with ONETRACK, disable BATCH.
+  * Small typos with CDROM comparisons.
+  * Logic for CDROM variable improved.
+  * Version bumped to 2.2.5 and targeted to Sarge.
+  
+ -- Jesus Climent <jesus.climent@hispalinux.es>  Sat,  2 Apr 2005 21:05:18 +0300
+
 abcde (2.2.4-1) unstable; urgency=low
 
   * Changed the way we call flac, to adapt to the new times:

@@ -11,7 +11,7 @@
 # Copyright for this work is to expire January 1, 2010, after which it
 # shall be public domain.
 
-VERSION="2.2.4"
+VERSION="2.2.5"
 
 usage ()
 {
@@ -846,7 +846,7 @@ do_discid ()
 				cdparanoia|debug)
 					if [ "$WEHAVEACD" = "y" ]; then
 						vecho "Querying the CD for audio tracks..."
-						CDPARANOIAOUTPUT=$( $CDROMREADER -d $CDROM -Q --verbose 2>&1 )
+						CDPARANOIAOUTPUT="$( $CDROMREADER -d $CDROM -Q --verbose 2>&1 )"
 						RET=$?
 						if [ ! "$RET" = "0" ];then
 							echo "Warning: Something went wrong while querying the CD... Maybe a DATA CD?"
@@ -1587,7 +1587,6 @@ do_cdread ()
 	UTRACKNUM=$1
 	CDDBTRACKNUM=$(expr $UTRACKNUM - 1)
 	WAVDATA="$ABCDETEMPDIR/track$UTRACKNUM.wav"
-	OUTDATA="$ABCDETEMPDIR/track$UTRACKNUM.$OUTPUTTYPE"
 	if [ -r "$CDDBDATA" ]; then
 		TRACKNAME=$(grep ^TTITLE$CDDBTRACKNUM= "$CDDBDATA" | head -n 1 | cut -f2- -d= | tr -d \[:cntrl:\])
 		echo "Grabbing track $UTRACKNUM: $TRACKNAME..." >&2
@@ -1931,7 +1930,8 @@ if [ "$ONETRACK" = "y" ] ; then
 			      exit 1 ;;
 	esac
 	if [ "$BATCH" = "y" ]; then
-		echo "abcde error: BATCH mode is not compatible with ONETRACK mode"
+		echo "abcde warning: BATCH mode is not compatible with ONETRACK mode"
+		BATCH=n
 	fi
 	# It does not matter how many tracks we want. In ONETRACK mode we grab them all
 	if [ $# -gt 0 ]; then
@@ -1987,7 +1987,7 @@ done
 # Sanity checks:
 
 # At this point a CDROM has to be defined, so we check it exists.
-if [ "$CDROM" != "" ] ; then 
+if [ X"$CDROM" != "X" ] ; then 
 	if [ "$CDROMREADERSYNTAX" = "cdda2wav" ] && [ "$NEEDCDROMID" = "y" ] ; then
 		if [ "$OSFLAVOUR" = "FBSD" ]; then
 			if ! echo "$CDROMID" | grep "^[0-9],[0-9],[0-9]$" >/dev/null 2>&1 ; then
@@ -1996,11 +1996,12 @@ if [ "$CDROM" != "" ] ; then
 				exit 1
 			fi
 		fi
-	elif [ ! -e $CDROM ] ; then
+	elif [ ! -e $CDROM -a X"$DOREAD" = "Xy" ] ; then
 		echo "abcde error: CDROM device cannot be found." >&2
 		exit 1
 	fi
-else
+# avoid processing if we are not going to hit the CDROM.
+elif [ X"$DOREAD" = "Xy" ]; then
 	echo "abcde error: CDROM has not been defined or cannot be found" >&2
 	exit 1
 fi
@@ -2053,7 +2054,7 @@ if echo $OUTPUTTYPE | grep ":" > /dev/null 2>&1 ; then
 		TEMPOUTPUTTYPE="${TEMPOUTPUTTYPE:+$TEMPOUTPUTTYPE,}$TEMPOUTPUT"
 	done
 	OUTPUTTYPE="$TEMPOUTPUTTYPE"
-	FS="$OLDFS"
+	export FS="$OLDFS"
 fi
 
 # If nothing has been specified, use oggenc for oggs and lame for mp3s and flac for flacs and speexenc for speex and mppenc for mpps
@@ -2534,3 +2535,7 @@ else
 fi
 )
 exit 0
+
+# b:is_bash
+# vim:tabstop=4
+
