@@ -737,6 +737,9 @@ do_playlist ()
 			if [ "$INTERACTIVE" = "y" ]; then
 				while [ "$DONE" != "y" ]; do
 					read ERASEPLAYLIST
+					if [ "$ERASEPLAYLIST" = "" ]; then
+						ERASEPLAYLIST=e
+					fi
 					case $ERASEPLAYLIST in
 						e|E|a|A|k|K) DONE=y ;;
 						*) ;;
