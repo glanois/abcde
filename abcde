@@ -11,7 +11,7 @@
 # Copyright for this work is to expire January 1, 2010, after which it
 # shall be public domain.
 
-VERSION="2.2.1"
+VERSION="2.2.2"
 
 usage ()
 {
@@ -764,7 +764,7 @@ do_playlist ()
 				ARTISTFILE=$(mungefilename "$TRACKARTIST")
 				# If we want to start the tracks with a given number, we need to modify the
 				# TRACKNUM value before evaluation
-				if [ -n $STARTTRACKNUMBER ] ; then
+				if [ -n "$STARTTRACKNUMBER" ] ; then
 					# Get the trackpadding from the current track
 					CURRENTTRACKPADDING=$(echo -n $UTRACKNUM | wc -c)
 					TRACKNUM=$( printf %0.${CURRENTTRACKPADDING}d $(expr ${UTRACKNUM} + ${STARTTRACKNUMBER} - 1 ))
@@ -843,7 +843,7 @@ do_discid ()
 				cdparanoia|debug)
 					if [ "$WEHAVEACD" = "y" ]; then
 						vecho "Querying the CD for audio tracks..."
-						TRACKS=$( $CDPARANOIA -Q 2>&1 | egrep '^[[:space:]]+[[:digit:]]' | tail -n 1 |  awk '{print $1}' | tr -d "." | tr '\n' ' ' )
+						TRACKS=$( $CDROMREADER -d $CDROM -Q --verbose 2>&1 | egrep '^[[:space:]]+[[:digit:]]' | tail -n 1 |  awk '{print $1}' | tr -d "." | tr '\n' ' ' )
 						CDPARANOIAAUDIOTRACKS="$TRACKS"
 					else
 						if [ -f "$ABCDETEMPDIR/status" ] && checkstatus cdparanoia-audio-tracks ; then
@@ -2204,37 +2204,6 @@ if [ X"$CDSPEEDVALUE" != "X" ]; then
 	case "$CDROMREADERSYNTAX" in
 		cdparanoia|debug) : ;;
 		*) do_cdspeed ;;
-	esac
-fi
-
-if [ "$STRIPDATATRACKS" = "y" ] && [ ! "$ONETRACK" = "y" ]; then
-	case "$CDROMREADERSYNTAX" in
-		cdparanoia|debug) 
-			# cdparanoia can query the CD, so let's process the TRACKQUEUE list with the results.
-			if checkstatus cdparanoia-audio-tracks; then
-				CDTRACKQUEUE=$( cat $ABCDETEMPDIR/cdparanoia-audio-tracks )
-			else
-				## FIXME ##
-				vecho "Querying the CD to obtain a list of valid audio tracks..."
-				$CDROMREADER -Q > $ABCDETEMPDIR/cdparanoia-query 2>&1
-				# Obtain a list of valid audio tracks from the results of the query
-				CDTRACKQUEUE=$( cat $ABCDETEMPDIR/cdparanoia-query | egrep '^[[:space:]]+[[:digit:]]' | awk '{print $1}' | tr -d "." | tr '\n' ' ' )
-			fi
-			# Obtain the track padding value from the before-processing list and pad the CD list
-			TRACKNUMPADDING=$( echo $TRACKQUEUE | awk '{print $1}' | tr -d " \n" | wc -c )
-			for TRACK in $CDTRACKQUEUE ; do
-				TRACKNUM=$(printf %0.${TRACKNUMPADDING}d $(expr ${TRACK} + 0 ))
-				PADNEWTRACKQUEUE=$(echo $PADNEWTRACKQUEUE $TRACKNUM)
-			done
-			CDTRACKQUEUE=$PADNEWTRACKQUEUE
-			# Now, compare if the values in the list are valid tracks in the CD
-			for TRACK in $TRACKQUEUE; do
-				if echo $CDTRACKQUEUE | grep $TRACK >/dev/null ; then
-					NEWTRACKQUEUE="$NEWTRACKQUEUE $TRACK"
-				fi
-			done
-			TRACKQUEUE="$NEWTRACKQUEUE"
-		;;
 	esac
 fi
 

@@ -1,9 +1,15 @@
+abcde (2.2.2-1) unstable; urgency=low
+
+  * Quotes missing when evaluating a value (Closes: #284018).
+
+ -- Jesus Climent <jesus.climent@hispalinux.es>  Fri,  3 Dec 2004 09:20:18 +0200
+
 abcde (2.2.1-1) unstable; urgency=low
 
   * Spotted and solved a problem with the way the data tracks were detected
-    (Closes: #282647).
+    (Closes: #282647, #280597).
 
- -- Jesus Climent <jesus.climent@hispalinux.es>  Wed, 24 Nov 2004 22:47:54 +0200
+ -- Jesus Climent <jesus.climent@hispalinux.es>  Mon, 29 Nov 2004 00:55:03 +0200
 
 abcde (2.2.0-1) unstable; urgency=low
 
