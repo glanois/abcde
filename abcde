@@ -42,7 +42,7 @@ echo "-m     Modify playlist to include CRLF endings, to comply with some player
 echo "-o <type1[,type2]...>"
 echo "       Output file type(s) (ogg,mp3,flac,spx,mpc). Defaults to ogg"
 echo "-p     Pad track numbers with 0's (if less than 10 tracks)"
-#echo "-P    Use UNIX pipes to read+encode without wav files"
+echo "-P     Use UNIX pipes to read+encode without wav files"
 echo "-r <host1[,host2]...>"
 echo "       Also encode on these remote hosts"
 echo "-R     Add replaygain values to the tag info (only for ogg,flac)"
@@ -1518,7 +1518,7 @@ do_cdread_one ()
 	LASTTRACKNUMBER=$1
 	FIRSTTRACKNUMBER=$2
 	WAVDATA="$ABCDETEMPDIR/track$FIRSTTRACKNUMBER.wav"
-	echo "Grabbing the CD to a single track..." >&2
+	echo "Grabbing the CD to a single track..." >&3
 	case "$CDROMREADERSYNTAX" in
 		cdparanoia) nice $READNICE $CDROMREADER -d $CDROM "1-" "$WAVDATA" >&2 ;;
 		cdda2wav)
@@ -1622,7 +1622,7 @@ do_cdread ()
 		if [ "$RETURN" = "0" -a ! -s "$WAVDATA" ]; then
 			RETURN=73 # fake a return code as cdparanoia return 0 also on aborted reads
 		fi
-                echo "readtrack-$UTRACKNUM: $CDROMREADER returned code $RETURN" >> "$ABCDETEMPDIR/errors"
+		echo "readtrack-$UTRACKNUM: $CDROMREADER returned code $RETURN" >> "$ABCDETEMPDIR/errors"
 		return $RETURN
 	else
 		echo readtrack-$UTRACKNUM >> "$ABCDETEMPDIR/status"
@@ -1864,7 +1864,7 @@ fi
 
 # Parse command line options
 #while getopts 1a:bc:C:d:Dhj:klLnNo:pr:S:t:T:vVx opt ; do
-while getopts 1a:A:bc:C:d:Dhj:klLnNo:pr:Rs:S:t:T:vVxw:W: opt ; do
+while getopts 1a:A:bc:C:d:Dhj:klLnNo:pPr:Rs:S:t:T:vVxw:W: opt ; do
 	case "$opt" in
 		1) ONETRACK=y ;;
 		a) ACTIONS="$OPTARG" ;;
@@ -1912,14 +1912,16 @@ done
 
 shift $(($OPTIND - 1))
 
-# Decide if we can continue. TO_REMOVE as soon as we find out about dagrab
-if [ "$ONETRACK" = "y" ] ; then 
+# Decide if we can continue.
+if [ "$ONETRACK" = "y" ]; then 
+	# FIXME # remove check as soon as we find out about dagrab
 	case "$CDROMREADERSYNTAX" in
-		dagrab|debug) echo "abcde error: ONETRACK reading is not suported with "$CDROMREADERSYNTAX" yet"
-			      exit 1 ;;
+		dagrab|cddafs|debug) echo "abcde error: ONETRACK reading is not suported with "$CDROMREADERSYNTAX" yet"
+			                 exit 1 ;;
 	esac
 	if [ "$BATCH" = "y" ]; then
 		echo "abcde error: BATCH mode is not compatible with ONETRACK mode"
+		BATCH=n
 	fi
 	# It does not matter how many tracks we want. In ONETRACK mode we grab them all
 	if [ $# -gt 0 ]; then
@@ -1991,6 +1993,26 @@ if [ "$CDROM" != "" ] ; then
 else
 	echo "abcde error: CDROM has not been defined or cannot be found" >&2
 	exit 1
+fi
+
+# USEPIPES is not compatible with:
+# - multiple outputs
+# - normalize
+# - anything else?
+if [ "$USEPIPES" = "y" ]; then
+	if [ $(echo $OUTPUTTYPE | tr , \  | wc -w ) -gt 1 ]; then
+		echo "abcde error: Unix pipes not compatible with multiple outputs"
+		exit 1
+	fi
+	if [ "$DONORMALIZE" = "y" ]; then
+		echo "abcde error: Unix pipes not compatible with normalizer"
+		# FIXME # Do we need to exit or shall we just disable the mode?
+		exit 1
+	fi
+	if [ "$DOENCODE" = "n" ]; then
+		vecho "Disabling Unix pipes since we are not encoding!"
+		USEPIPES=n
+	fi
 fi
 
 # Decide which CDROM reader we're gonna use
