@@ -2451,8 +2451,7 @@ do
 		else
 #			TRACKNUM=$(printf %0.${TRACKNUMPADDING}d $(expr ${UTRACKNUM} + 0))
 			TRACKNUM=$UTRACKNUM
-		        CDDBTRACKNUM=$(expr $UTRACKNUM - 1)
-#original			TRACKNAME=$(grep ^TTITLE$CDDBTRACKNUM= "$CDDBDATA" | cut -f2- -d= | tr -d \[:cntrl:\] | sed 's/\ \+$//')
+			CDDBTRACKNUM=$(expr $UTRACKNUM - 1)
 			TRACKNAME="$(grep ^TTITLE$CDDBTRACKNUM= "$CDDBDATA" | cut -f2- -d= | tr -d \[:cntrl:\] | sed 's/\ \+$//')"
 			splitvarious
 		fi
