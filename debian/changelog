@@ -1,3 +1,9 @@
+abcde (2.1.21-1) unstable; urgency=low
+
+  * Changed normalize with normalize-audio (Closes: #267053).
+
+ -- Jesus Climent <jesus.climent@hispalinux.es>  Fri, 20 Aug 2004 13:16:46 +0000
+
 abcde (2.1.20-1) unstable; urgency=low
 
   * The "Let's have a good abcde in Sarge" release.

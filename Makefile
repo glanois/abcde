@@ -1,4 +1,4 @@
-VERSION = 2.1.20
+VERSION = 2.1.21
 INSTALL = /usr/bin/install -c
 
 # Installation directories
