@@ -1,6 +1,7 @@
 abcde 2.1.21
 
-  * Changed normalize with normalize-audio (Closes: #267053).
+  * Changed normalize with normalize-audio (Closes: #267053). Carefull! this
+    might be a debian-only problem...
 
  -- Jesus Climent <jesus.climent@hispalinux.es>  Fri, 20 Aug 2004 13:16:46 +0000
 
