@@ -52,6 +52,11 @@ http://www.hispalinux.es/~data/files/cd-discid/
 
 MAJOR CHANGES
 =============
+Changes in 2.1.20:
+
+* The mungefile() function noe strips out stars (*) in the album name for
+  creating the directory and the files.
+
 New options in 2.1.19:
 
 * ONETRACK mode has been introduced. Setting the flag "-1" will create a

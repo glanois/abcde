@@ -1571,7 +1571,7 @@ ACTIONS=cddb,read,encode,tag,move,clean
 # Custom filename munging:
 mungefilename ()
 {
-	echo "$@" | sed s,:,\ -,g | tr \ / __ | tr -d \'\"\?\[:cntrl:\]
+	echo "$@" | sed s,:,\ -,g | tr \ /\* __+ | tr -d \'\"\?\[:cntrl:\]
 }
 
 # Pre-read execution:

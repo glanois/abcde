@@ -1,8 +1,12 @@
 abcde (2.1.20-1) unstable; urgency=low
 
-  * 
+  * The "Let's have a good abcde in Sarge" release.
+  * The mungefile() function changes * with + by default to avoid creating
+    directories with the start expanded to the files found in the current
+    directory. abcde2.2 will most likelly contain a better workaround.
+  * Correct default OUTPUTFORMAT in man page (Closes: #250649)
 
- -- Jesus Climent <jesus.climent@hispalinux.es>  Sun, 20 Jun 2004 11:54:18 +0000
+ -- Jesus Climent <jesus.climent@hispalinux.es>  Fri, 30 Jul 2004 10:16:46 +0300
 
 abcde (2.1.19-1) unstable; urgency=low
 
