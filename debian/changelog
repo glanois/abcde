@@ -1,9 +1,9 @@
 abcde (2.2.1-1) unstable; urgency=low
 
   * Spotted and solved a problem with the way the data tracks were detected
-    (Closes: #282647).
+    (Closes: #282647, #280597).
 
- -- Jesus Climent <jesus.climent@hispalinux.es>  Wed, 24 Nov 2004 22:47:54 +0200
+ -- Jesus Climent <jesus.climent@hispalinux.es>  Mon, 29 Nov 2004 00:55:03 +0200
 
 abcde (2.2.0-1) unstable; urgency=low
 
