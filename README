@@ -26,6 +26,7 @@ ID3TAGV=1
 MAJOR CHANGES
 =============
 Changes in 2.3:
+
 * Support for mkcue, to create a CUE sheet of the CD structure. It can be used
   with "-1" to create a backup, so that later on the original CD can be
   recreated.
@@ -41,6 +42,13 @@ Changes in 2.3:
 * The FLAC encoder forces the files to be overwritten, in case they previously
   exists. This avoids a half-through abcde run to continue without errors in
   case it was cancelled during the FLAC encoding.
+* A post_read() function has been added to allow the user to do things before
+  ejecting the CD.
+* Walk through the possible encoders that (in Debian) we depend upon and use
+  the first available, if none has been defined in the configuration file.
+* If the user reads a set of tracks not starting with 1 and defines an starting
+  track number, renumber the tracks with that number provided as a starting
+  track.
 
 Changes in 2.2:
 

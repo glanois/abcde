@@ -2230,7 +2230,7 @@ fi
 
 # Parse command line options
 #while getopts 1a:bc:C:d:Dhj:klLnNo:pr:S:t:T:vVx opt ; do
-while getopts 1a:A:bc:C:d:Dehj:klLmMnNo:pPr:Rs:S:t:T:vVxw:W: opt ; do
+while getopts 1a:bc:C:d:Dehj:klLmMnNo:pPr:RS:t:T:vVxw:W: opt ; do
 	case "$opt" in
 		1) ONETRACK=y ;;
 		a) ACTIONS="$OPTARG" ;;
@@ -2258,7 +2258,6 @@ while getopts 1a:A:bc:C:d:Dehj:klLmMnNo:pPr:Rs:S:t:T:vVxw:W: opt ; do
 		P) USEPIPES=y ;;
 		r) REMOTEHOSTS="$OPTARG" ;;
 		R) REPLAYGAIN=y ;;
-		s) STARTTRACKNUMBER="$OPTARG" ;;
 		S) CDSPEEDVALUE="$OPTARG" ;;
 #		t) PREPROCESSFORMATS="$OPTARG"
 #		   PREPROCESS=y ;;
