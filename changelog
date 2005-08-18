@@ -1,3 +1,20 @@
+abcde 2.3.2
+
+  * Too fast... I forgot to make the tarball and change the version strings in
+    several places. Fixed.
+
+ -- Jesus Climent <jesus.climent@hispalinux.es>  Fri, 19 Aug 2005 00:44:37 +0300
+
+abcde 2.3.1
+
+  * The new "I knew there were going to be bugs" upstream release!
+  * MKCUE needs to be passed some $CDROM as an option, or otherwise it will
+    not read the CDROM, in case is not /dev/cdrom.
+  * Also, make the CUEREADER a bit more general, since we might be using other
+    CUE extractors.
+
+ -- Jesus Climent <jesus.climent@hispalinux.es>  Thu, 18 Aug 2005 23:44:20 +0300
+
 abcde 2.3.0
 
   * New upstream release!
