@@ -1,3 +1,11 @@
+abcde (2.3.3-1) unstable; urgency=low
+
+  * Rips done in a single track were getting tagged as Various. Corrected.
+  * Possibly eliminated some bashisms from using a variable as a variable
+    (Closes: #324399). Thanks to A Costa.
+
+ -- Jesus Climent <jesus.climent@hispalinux.es>  Fri, 26 Aug 2005 01:36:35 +0300
+
 abcde (2.3.2-1) unstable; urgency=low
 
   * Too fast... I forgot to make the tarball and change the version strings in
