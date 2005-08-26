@@ -11,7 +11,7 @@
 # Copyright for this work is to expire January 1, 2010, after which it
 # shall be public domain.
 
-VERSION="2.3.3"
+VERSION="2.3.4"
 
 usage ()
 {
@@ -1824,7 +1824,7 @@ do_cddbedit ()
 	echo "variousartiststyle=$VARIOUSARTISTSTYLE" >> "$ABCDETEMPDIR/status"
 
 	if [ "$EDITCDDB" = "y" ] && [ "$UNINTENTIONALLY_ANGER_THE_FREEDB_PEOPLE" = "y" ]; then
-		if [ $CDDBDATAMD5SUM != "" ]  && [ $CDDBDATAMD5SUM != $($MD5SUM "$CDDBDATA" | cut -d " " -f 1) ]; then
+		if [ "$CDDBDATAMD5SUM" != "" ]  && [ "$CDDBDATAMD5SUM" != "$($MD5SUM "$CDDBDATA" | cut -d " " -f 1)" ]; then
 			# This works but does not have the necessary error checking
 			# yet. If you are familiar with the CDDB spec
 			# (see http://www.freedb.org/src/latest/DBFORMAT) 
@@ -2167,6 +2167,7 @@ DEFAULT_OUTPUT_BINARIES=vorbis:oggenc,flac:flac,mp3:lame,mp3:bladeenc,spx:speex
 # Let's use these checkings to determine the OS flavour, which will be used later
 if [ X$(uname) = "XFreeBSD" ] ; then
 	HTTPGET=fetch
+	MD5SUM=md5
 	NEEDCDROMID=y
 	OSFLAVOUR=FBSD
 elif [ X$(uname) = "XDarwin" ] ; then
@@ -2177,6 +2178,9 @@ elif [ X$(uname) = "XDarwin" ] ; then
 	CDROMREADERSYNTAX=cddafs
 elif [ X$(uname) = "XOpenBSD" ] ; then
 	HTTPGET=wget
+	MD5SUM=md5
+elif [ X$(uname) = "XNetBSD" ] ; then
+	HTTPGET=ftp
 	MD5SUM=md5
 else
 	HTTPGET=wget
@@ -2213,6 +2217,7 @@ if [ "$HTTPGETOPTS" = "" ] ; then
 		wget) HTTPGETOPTS="-q -O -";;
 		curl) HTTPGETOPTS="-f -s";;
 		fetch)HTTPGETOPTS="-q -o -";;
+		ftp)  HTTPGETOPTS="-q -o -";;
 		*) echo "abcde warning: HTTPGET in non-standard and HTTPGETOPTS are not defined." >&2 ;;
 	esac
 fi
