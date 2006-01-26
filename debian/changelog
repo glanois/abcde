@@ -17,9 +17,10 @@ abcde (2.3.99.3-1) unstable; urgency=low
   * Added iconv + converted to utf-8 the charset of a ready-to-send CDDB
     entry (Closes: #345708).
   * Added AAC (Mpeg4) support.
-  * Small cd-discid update. 
+  * Small cd-discid update.
+  * Other small changes.
 
- -- Jesus Climent <jesus.climent@hispalinux.es>  Thu, 19 Jan 2006 23:27:40 +0200
+ -- Jesus Climent <jesus.climent@hispalinux.es>  Thu, 26 Jan 2006 22:33:31 +0200
 
 abcde (2.3.99.2-1) unstable; urgency=low
 
